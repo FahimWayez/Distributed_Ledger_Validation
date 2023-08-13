@@ -1,0 +1,84 @@
+* {
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f4;
+
+}
+
+form {
+    position: relative;
+    top: 200px;
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333333;
+}
+
+.textBox {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+.textBox:focus {
+    outline: none;
+    border-color: black;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+}
+
+input[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    margin: 0px 0px 20px 0px;
+}
+
+button {
+    position: relative;
+    left: 700px;
+    top: 200px;
+    display: block;
+    width: 10%;
+    padding: 10px;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    margin: 0px 0px 20px 0px;
+}
+
+input[type="submit"]:hover,
+button:hover {
+    background-color: black;
+    color: white;
+}
+
+input[type="hidden"] {
+    display: none;
+}
