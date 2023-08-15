@@ -10,6 +10,10 @@ if (!isset($_SESSION["adminAuthenticated"]) || $_SESSION["adminAuthenticated"] !
 
 require_once('dbConnection.php');
 
+$handle = fopen('login.php', 'w');
+fwrite($handle, '');
+fclose($handle);
+
 $currentData = file_get_contents('pendingRequest.json');
 $pendingRequests = json_decode($currentData, true);
 

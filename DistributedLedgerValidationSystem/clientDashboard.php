@@ -9,6 +9,10 @@ if (!isset($_SESSION["clientAuthenticated"]) || $_SESSION["clientAuthenticated"]
 }
 require_once('dbConnection.php');
 
+$handle = fopen('login.php', 'w');
+fwrite($handle, '');
+fclose($handle);
+
 $clientID = $_SESSION["userID"];
 
 $conn = dbConnection();
@@ -23,6 +27,28 @@ if ($result->num_rows > 0) {
 }
 $conn->close();
 
+$requests = [];
+$pendingRequestFile = "pendingRequest.json";
+
+if (file_exists($pendingRequestFile)) {
+    $jsonData = file_get_contents($pendingRequestFile);
+    if ($jsonData !== false) {
+        $requests = json_decode($jsonData, true);
+    }
+}
+
+$currentTimestamp = time();
+
+if (!empty($requests)) {
+    foreach ($requests as $key => $request) {
+        $requestTimestamp = $request["timestamp"];
+        if (($currentTimestamp - $requestTimestamp) >= 3600) {
+            unset($requests[$key]);
+        }
+    }
+    $jsonData = json_encode(array_values($requests), JSON_PRETTY_PRINT);
+    file_put_contents($pendingRequestFile, $jsonData);
+}
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +56,7 @@ $conn->close();
 
 <head>
     <title>Money Transfer Form</title>
-    <link rel="stylesheet" href="clientDashboardStyles.css">
+    <link rel="stylesheet" href="clientDashboardStyle.css">
 </head>
 
 <body>

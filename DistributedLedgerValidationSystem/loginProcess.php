@@ -14,5 +14,5 @@
     fwrite($handle, $phpCode);
     fclose($handle); 
     header("Location: login.php"); 
-    
+
 ?>

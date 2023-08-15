@@ -10,14 +10,17 @@ if (!isset($_SESSION["clientAuthenticated"]) || $_SESSION["clientAuthenticated"]
 
 include 'dbConnection.php';
 
+
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $storedUserID = $_SESSION["userID"];
+    // $storedPassword = $_SESSION["password"];
     $receiverUserID = $_POST["receiver"];
     $amount = $_POST["amount"];
     $current_time = $_POST["current_time"];
     $taka = $_POST["taka"];
 
 
+        
     if($receiverUserID == 1 || $receiverUserID == 2 || $receiverUserID ==3)
     {
         echo "Receiver with the given userID does not exist.";
@@ -43,6 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     
     $conn2 = dbConnection();
     $updateTakaQuery = "UPDATE loginCredentials SET taka = '$leftOver' WHERE userID = '$storedUserID'";
+    // $sqlPassword = "SELECT loginCredentials SET taka = '$leftOver' WHERE userID = '$storedUserID'";
     $updateResult = $conn2->query($updateTakaQuery);
     
     if (!$updateResult) {
@@ -50,7 +54,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Refresh: 3; url=clientDashboard.php");
         exit;
     }
-    
+
+    $requests = json_decode(file_get_contents("pendingRequest.json"), true);
+    $currentTimestamp = time();
+
+    foreach ($requests as $key => $request) {
+        $requestTimestamp = $request["timestamp"];
+        if (($currentTimestamp - $requestTimestamp) >= 3600) {
+            unset($requests[$key]);
+        }
+    }
     $requestId = uniqid();
     
     $encryptedReceiver = openssl_encrypt($receiverUserID, "aes-256-cbc", 3, 0, "}^(*^s83&ADP{>kd");
@@ -69,8 +82,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         "approvedBy" => []
     );
     
-    $existingData = file_get_contents("pendingRequest.json");
-    $requests = json_decode($existingData, true);
+    // $existingData = file_get_contents("pendingRequest.json");
+    // $requests = json_decode($existingData, true);
     
     $requests[] = $requestData;
     
@@ -86,4 +99,5 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 }
+
 ?>

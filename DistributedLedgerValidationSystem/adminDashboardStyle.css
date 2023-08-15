@@ -45,9 +45,27 @@ tr:hover {
 
 a {
     text-decoration: none;
-    color: #007bff;
+    color: #0654a8;
 }
 
 a:hover {
     text-decoration: underline;
+}
+
+button{
+    position: relative;
+    left: 40%;
+    top: 250px;
+    padding: 10px 20px 10px 20px;
+    cursor: pointer;
+    background: #333;
+    color: white;
+    border-radius:20px;
+    width: 200px;
+    transition: all 0.3s ease;
+}
+
+button:hover{
+    background: white;
+    color: #333;
 }

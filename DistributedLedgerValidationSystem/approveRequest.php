@@ -45,12 +45,38 @@ if ($_SERVER["REQUEST_METHOD"] === "GET" && isset($_GET["reqId"])) {
 
                 if ($request["voteCount"] >= 2) {
                     $request["approved"] = true;
-
+                
                     $approvedData = file_get_contents("approvedRequests.json");
                     $approvedRequests = json_decode($approvedData, true);
                     $approvedRequests[] = $request;
                     $jsonData = json_encode($approvedRequests, JSON_PRETTY_PRINT);
                     file_put_contents("approvedRequests.json", $jsonData);
+
+                    foreach (range(1, 3) as $adminNumber) {
+                        $fileNameAdmin = "approvedRequest" . $adminNumber . ".json";
+                        $approvedData = file_get_contents($fileNameAdmin);
+                        $approvedRequests = json_decode($approvedData, true);
+                        
+                        $requestExists = false;
+                        foreach ($approvedRequests as $adminRequest) {
+                            if ($adminRequest["requestId"] === $request["requestId"]) {
+                                $requestExists = true;
+                                break;
+                            }
+                        }
+                                            
+                        if (!$requestExists) {
+                            $approvedRequests[] = array(
+                            "requestId" => $request["requestId"],
+                            "sender" => $request["sender"],
+                            "receiver" => $request["receiver"],
+                            "amount" => $request["amount"],
+                            "timestamp" => $request["timestamp"],
+                            "approved" => $request["approvedBy"][$adminID]);
+                            $jsonData = json_encode($approvedRequests, JSON_PRETTY_PRINT);
+                            file_put_contents($fileNameAdmin, $jsonData);
+                        }
+                    }   
 
                     unset($requests[array_search($request, $requests)]);
                     $jsonData = json_encode(array_values($requests), JSON_PRETTY_PRINT);
